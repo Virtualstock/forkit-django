@@ -1,6 +1,6 @@
 from django.test import TestCase
 from forkit import utils, diff
-from forkit.tests.models import Author, Post, Blog, Tag
+from forkit.tests.models import Author, Post, Blog, Tag, E
 
 __all__ = ('UtilsTestCase',)
 
@@ -72,6 +72,30 @@ class UtilsTestCase(TestCase):
 
         self.assertEqual(utils._default_model_fields(tag),
             set(['name', 'post_set']))
+
+    def test_default_fields_includes_id_when_exclude_is_none(self):
+        tag = Tag()
+
+        self.assertEqual(utils._default_model_fields(tag, exclude=None),
+            set(['id', 'name', 'post_set']))
+
+    def test_default_fields_excludes_custom_pk(self):
+        obj = E()
+
+        self.assertEqual(utils._default_model_fields(obj),
+            set(['title']))
+
+    def test_default_fields_includes_custom_pk_when_exclude_is_empty(self):
+        obj = E()
+
+        self.assertEqual(utils._default_model_fields(obj, exclude=None),
+            set(['eyedee', 'title',]))
+
+    def test_default_fields_excludes_custom_pk_when_exclude_includes_pk(self):
+        obj = E()
+
+        self.assertEqual(utils._default_model_fields(obj, exclude=["pk"]),
+            set(['title',]))
 
     def test_deep_default_fields(self):
         author = Author()

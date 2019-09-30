@@ -77,3 +77,12 @@ class D(ForkableModel):
 
     def __str__(self):
         return u'{0}'.format(self.title)
+
+
+@python_2_unicode_compatible
+class E(ForkableModel):
+    eyedee = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=50)
+
+    def __str__(self):
+        return u'{0}'.format(self.title)
