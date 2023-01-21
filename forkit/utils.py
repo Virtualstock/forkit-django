@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.fields import related
+from django.core.exceptions import FieldDoesNotExist
 
 
 class DeferredCommit(object):
@@ -74,7 +75,7 @@ def _get_field_by_accessor(instance, accessor):
         if isinstance(field, related.ForeignObjectRel):
             field = field.field
     # if this occurs, try related object accessor
-    except models.FieldDoesNotExist as e:
+    except FieldDoesNotExist as e:
         # check to see if this memo has been set
         if not hasattr(instance._meta, 'related_objects_by_accessor'):
             memo = {}
